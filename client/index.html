@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <title>Todo App</title>
+      <link href="css/style.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+      
+      <style>.list{border:1px solid rgba(0,0,0,.125);margin-left:15px;margin-right:15px}
+             .strikethrough{text-decoration:line-through}
+             .full-width{width:100%}
+             .is-success{background: #F2F6FA;} 
+      </style>
+      <style>
+          [v-cloak] {
+            display: none;
+          }
+      </style>
+      </head>
+      <body>
+      <div id="todo-app" >
+        <div class="container" >
+          <div class="row mt-5">
+            <div class="col-md-12 text-center">
+              <h1 class="h1-responsive">CS4220 ToDo App:</h1>
+            </div>
+          </div>
+          <div class="row mt-5 ">
+            <div class="col-md-3 offset-md-2 left-column mb-1">
+              <ul class="list-group">
+              <!-- this vue component display all the projects from database-->                
+               <project-component v-bind={projects,displayTodos}></project-component>
+
+              <!-- add projects to database with validation--> 
+                <li   class="list-group-item d-flex justify-content-between align-items-center">
+                 <form>
+                    <input  v-model="project" class="form-control"  placeholder="Add new Project" type="text">
+                 </form>
+                  <span class="badge primary-color badge-pill">
+                    <a  class="prefix">
+                      <i  v-on:click="createProject"  aria-hidden="true" class="fa fa-plus"></i>
+                    </a>
+                  </span>
+                </li>
+                <p v-if="failedproject!=''" class="has-text-danger">*Sorry the project
+                  <b>{{failedproject}}</b> already exists.</p>
+              </ul>
+            </div>
+            <!-- based on value of start like true or false it show all the todos -->
+            <div v-show="!start"  class="col-md-5 list mb-1">
+              <div class="row px-3 py-3" >
+                  <display-component v-bind="{proedit,activeProject,editProject,toggleProject,removeProject}"></display-component>
+              </div>
+              <div class="row px-4 mt-3">
+                <!-- display all the todos of selected project uisng this vue component -->
+                  <todos-component v-bind="{todos,editTodo,toggleTodo,removeTodo,changeStatus}"></todos-component>
+              </div>
+              <div class="row px-4 mt-1">
+                <div class="md-form">
+                  <form>
+                    <!-- this button click call createTodo function-->
+                    <a class="prefix">
+                      <i v-on:click="createTodo" class="fa fa-plus prefix"></i>
+                    </a>
+                    <input class="form-control" id="form2" v-model="todo" placeholder="Add new Task" type="text">
+                    <span class="is-pulled-right"><a class="button  is-danger has-text-white" v-on:click="archiveTodo()">Archive Project Todos</a></span>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- if we do not have projects in database then it will show this with value of start 'true' -->
+            <div v-show="start" class="col-md-5 test 5 list text-center">
+              <h5  class="pt-3">Choose category from menu in the left.</h5>
+              <p  class="pt-5">You can also create a new category by typing the name and pressing the enter or clicking on the
+                <span class="badge primary-color badge-pill">
+                  <i  aria-hidden="true" class="fa fa-plus"></i>
+                </span>
+                button.
+              </p>
+            </div>
+          </div>
+      </div>
+      </div>
+        <script type="text/javascript" src="https://unpkg.com/vue@2.5.15/dist/vue.min.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/socket.io-client@2.1.0/dist/socket.io.js"></script>
+        <script type="text/javascript" src="app.js"></script>
+    </body>
+</html>
